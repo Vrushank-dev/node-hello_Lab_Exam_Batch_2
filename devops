@@ -1,4 +1,4 @@
-
+//node.js 
 FROM node:14
 WORKDIR /usr/src/app
 COPY package*.json ./
@@ -7,7 +7,181 @@ COPY . .
 EXPOSE 3000
 CMD [ "node", "index.js" ]
 
+//online webb app
+FROM httpd:alpine
+COPY ./html/usr/local/apache/htdocs/
+Docker build -t <imagename:tag>
+Docker run -d <container name> -p 8080:80 <image:tag>
+
+//Docker
 sudo docker build -t vrushank:v1 .
 sudo docker tag vrushank:v1 vrushanknb/hello
 sudo docker push vrushanknb/hello
 
+
+
+//docker volume
+ubuntu@ubuntu-Vostro-3546:~$ cd Desktop 
+ubuntu@ubuntu-Vostro-3546:~/Desktop$ mkdir vvol
+ubuntu@ubuntu-Vostro-3546:~/Desktop$ cd vvol
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker create volume vrushank
+Unable to find image 'volume:latest' locally
+Error response from daemon: pull access denied for volume, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker volume create vrushank
+vrushank
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker ls
+docker: 'ls' is not a docker command.
+See 'docker --help'
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker volume ls
+DRIVER    VOLUME NAME
+local     5b892fe1f0cb673f36656701b30129f3f615c5eab4c78851306d00202505e026
+local     416be128a894f5043579f265a89d6c595b63b039571026ccc7864e0e1122b80d
+local     cmp_db_data
+local     myvol
+local     vol1
+local     vrushank
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker volume inspect vrushank
+[
+    {
+        "CreatedAt": "2023-01-13T07:35:46+05:30",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/var/lib/docker/volumes/vrushank/_data",
+        "Name": "vrushank",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker run -itd --name sachin src=raikar.target=/vrushank alpine 
+docker: invalid reference format.
+See 'docker run --help'.
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker run -itd --name sachin source=vrushank.target=/vrushank alpine 
+docker: invalid reference format.
+See 'docker run --help'.
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker run -itd --name sachin source=vrushank,target=/vrushank alpine 
+docker: invalid reference format.
+See 'docker run --help'.
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker run -itd --name sachin --mount  source=vrushank,target=/vrushank alpine 
+b3fa289035bbd63d347c058e37573d2604a2ebd6be5279d36b13d6946df94b42
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker exec -it sachin sh
+/ # ls
+bin       etc       lib       mnt       proc      run       srv       tmp       var
+dev       home      media     opt       root      sbin      sys       usr       vrushank
+/ # cd vrushank
+/vrushank # ls
+/vrushank # mkdir as
+/vrushank # ls
+as
+/vrushank # exit
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker run -itd --name sachin1 --mount  source=vrushank,target=/vrushank alpine 
+52fc0f36ad23e6ed3713064db50eb10babe46d322fdab3970d91fcfe0084de7b
+ubuntu@ubuntu-Vostro-3546:~/Desktop/vvol$ sudo docker exec -it sachin1 sh
+/ # ls
+bin       etc       lib       mnt       proc      run       srv       tmp       var
+dev       home      media     opt       root      sbin      sys       usr       vrushank
+/ # cd vrushank
+/vrushank # ls
+as
+
+
+
+
+
+
+
+
+
+//aANSIBLE
+- name: install LAMP
+  remote_user: ubuntu
+  hosts: all
+  become: true
+  become_user: root
+  gather_facts: true
+  tasks:
+    - name: 1.Install apache2
+      package: name:apache2 state:present
+
+    - name: 2. Install php module
+
+      package: name=php state=present
+    - name: 3.install PHP module for Apache
+      package: name=libapache2-mod-php state=present
+
+    - name: 4.install mysql for Apache
+      package: name=php-mysql state=present
+
+ 
+    - name: 5. start Apache
+
+       service: name=apache2 state=running enabled=yes
+
+ 
+
+     - name: 6. install Hello World html script
+
+
+       copy: src=index.html dest=/var/www/html/index.html mode=0664
+       
+       
+       
+       
+       
+       
+       
+       
+       //Pipeline
+       
+       pipeline {
+    agent any
+
+     tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "Myfirstmaven"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                // Get some code from a GitHub repository
+                 checkout poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], gitTool: 'ubuntugit', userRemoteConfigs: [[url: 'https://github.com/djgit17/DockerMavenJava.git']]]
+
+                // Run Maven on a Unix agent.
+                sh "mvn clean package"
+
+                // To run Maven on a Windows agent, use
+                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+
+        }
+
+        stage('Build docker image') {
+            steps {
+                script {
+
+                    sh 'docker build -t sahanak839/dockerfile .'
+                }
+
+            }
+        }
+        stage('Run docker container') {
+            steps {
+                script {
+
+                    sh 'docker run -d --name mavendocekerrn_452 -p 6230:8080 sahanak839/dockerfile'
+                }
+
+            }
+        }
+        stage('Push to DockerHub') {
+            steps {
+                script {
+
+                        sh 'docker login -u sahanak839 -p Dinesh@123'
+                        sh 'docker push sahanak839/dockerfile'
+
+                }
+            }
+        }
+    }
+}
