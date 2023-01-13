@@ -185,3 +185,36 @@ as
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//node.js execute shell 
+
+
+sudo apt-get update -y
+
+sudo apt-get install nodejs -y
+
+sudo apt-get install npm -y
+
+Under Build Steps – Execute shell (Execute the following commands)
+
+sudo npm install
+
+■ Sudo npm test - go inside the node-example- to run test THIS IS BOUND TO GET STUCK AS IT RUNNIN IN THE FOREGROUND
+
+sudo npm install -g pm2
+
+sudo pm2 start app.js (Sometimes if app.js is aready running then use stop and then start again)
